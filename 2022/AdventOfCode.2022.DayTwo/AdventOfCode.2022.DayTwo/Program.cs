@@ -1,14 +1,14 @@
 ﻿var beatMap = new[,]
 {                     // X  Y  Z
-    /* (A) rock */     { 3, 6, 0 },
-    /* (B) paper */    { 0, 3, 6 },
-    /* (C) Scissors */ { 6, 0, 3 }
+    /* (A) rock */     { 3, 1, 2 },
+    /* (B) paper */    { 1, 2, 3 },
+    /* (C) Scissors */ { 2, 3, 1 }
 };
 
 var chooses = new Dictionary<string, (int index, int value)>
 {
     { "A", (0, -1) }, { "B", (1, -1) }, { "C", (2, -1) },
-    { "X", (0, 1) }, { "Y", (1, 2) }, { "Z", (2, 3) }
+    { "X", (0, 0) }, { "Y", (1, 3) }, { "Z", (2, 6) }
 };
 
 var totalScore = 0;
