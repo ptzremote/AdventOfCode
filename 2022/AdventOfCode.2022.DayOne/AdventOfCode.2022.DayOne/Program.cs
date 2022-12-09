@@ -1,12 +1,11 @@
-﻿var maxTotalValue = int.MinValue;
-var currentTotal = 0;
+﻿var currentTotal = 0;
+var pr = new PriorityQueue<int, int>();
 
 foreach (var line in File.ReadLines("dump.txt"))
 {
     if (string.IsNullOrWhiteSpace(line))
     {
-        if (currentTotal > maxTotalValue)
-            maxTotalValue = currentTotal;
+        pr.Enqueue(currentTotal, -currentTotal);
 
         currentTotal = 0;
         continue;
@@ -15,3 +14,5 @@ foreach (var line in File.ReadLines("dump.txt"))
     var value = int.Parse(line);
     currentTotal += value;
 }
+
+Console.WriteLine(pr.Dequeue() + pr.Dequeue() + pr.Dequeue());
