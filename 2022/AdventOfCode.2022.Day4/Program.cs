@@ -11,8 +11,9 @@ foreach(var line in File.ReadLines("dump.txt")) {
     var secondSectionStart = int.Parse(secondSections[0]);
     var secondSectionEnd = int.Parse(secondSections[1]);
 
-    if ((firstSectionStart <= secondSectionStart && firstSectionEnd  >= secondSectionEnd) ||
-        (firstSectionStart >= secondSectionStart && firstSectionEnd <= secondSectionEnd))
+    if ((firstSectionStart >= secondSectionStart && firstSectionStart <= secondSectionEnd) ||
+        (firstSectionEnd >= secondSectionStart && firstSectionEnd <= secondSectionEnd) ||
+        (firstSectionStart <= secondSectionStart && firstSectionEnd >= secondSectionEnd))
         result++;
 }
 
