@@ -1,5 +1,5 @@
 ﻿var chars = File.ReadAllText("dump.txt").ToCharArray();
-var markerCount = 4;
+var markerCount = 14;
 
 var startIndex = 0;
 var queue = new Queue<char>();
