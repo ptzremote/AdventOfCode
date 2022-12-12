@@ -24,12 +24,19 @@ foreach (var line in File.ReadLines("dump.txt"))
         var numbers = rx.Matches(line).Select(c => int.Parse(c.Value)).ToArray();
 
         var moves = numbers[0];
+        var buffer = new Stack<char>();
         do
         {
             var value = dict[numbers[1]].Pop();
-            dict[numbers[2]].Push(value);
+            buffer.Push(value);
             moves--;
         } while (moves > 0);
+
+        while (buffer.Count > 0)
+        {
+            var value = buffer.Pop();
+            dict[numbers[2]].Push(value);
+        }
     }
     else
         ProcessInit(line);
