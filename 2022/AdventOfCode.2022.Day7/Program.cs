@@ -54,7 +54,16 @@ void HandleCommand(string command)
     // else ls
 }
 
-Console.WriteLine(nodes.Where(c => c.Value <= 100000).Select(c => c.Value).Sum());
+var requiredSize = 70000000 - root.Value - 30000000;
+
+var currentFolderSize = long.MaxValue;
+foreach (var node in nodes)
+{
+    if(node.Value < currentFolderSize && node.Value > -requiredSize)
+        currentFolderSize = node.Value;
+}
+
+Console.WriteLine(currentFolderSize);
 
 sealed class Node
 {
