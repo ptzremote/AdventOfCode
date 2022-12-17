@@ -1,7 +1,5 @@
 ﻿var firstLineProcessed = false;
-var forest = new int[0, 0];
-
-var visibleTrees = new HashSet<TreePosition>();
+var forest = new Tree[0, 0];
 
 var lineIndex = 0;
 foreach (var line in File.ReadLines("dump.txt"))
@@ -10,72 +8,83 @@ foreach (var line in File.ReadLines("dump.txt"))
 
     if (firstLineProcessed == false)
     {
-        forest = new int[trees.Length, trees.Length];
+        forest = new Tree[trees.Length, trees.Length];
     }
 
     for (int i = 0; i < trees.Length; i++)
     {
-        forest[lineIndex, i] = trees[i];
+        forest[lineIndex, i] = new Tree { Height = trees[i] };
     }
 
     lineIndex++;
     firstLineProcessed = true;
 }
 
-for(int line = 0; line < forest.GetLength(0); line++)
+var forestLength = forest.GetLength(0);
+for (int i = 1; i < forestLength - 1; i++)
 {
-    var minHeight = int.MinValue;
-    for (int column = 0; column < forest.GetLength(0); column++)
+    for (int j = 1; j < forestLength - 1; j++)
     {
-        var currentTreeHeight = forest[line, column];
+        var currentTree = forest[i, j];
 
-        if (currentTreeHeight > minHeight)
+        for (int k = j + 1; k < forestLength; k++)
         {
-            minHeight = currentTreeHeight;
-            visibleTrees.Add(new TreePosition(line, column));
+            var rightTree = forest[i, k];
+            
+            currentTree.RightScore += 1;
+
+            if (currentTree.Height <= rightTree.Height)
+                break;
         }
-    }
 
-    minHeight = int.MinValue;
-    for (int column = forest.GetLength(0) - 1; column >= 0; column--)
-    {
-        var currentTreeHeight = forest[line, column];;
-
-        if (currentTreeHeight > minHeight)
+        for (int k = j - 1; k >= 0; k--)
         {
-            minHeight = currentTreeHeight;
-            visibleTrees.Add(new TreePosition(line, column));
+            var leftTree = forest[i, k];
+            
+            currentTree.LeftScore += 1;
+
+            if (currentTree.Height <= leftTree.Height)
+                break;
+        }
+
+        for (int k = i + 1; k < forestLength; k++)
+        {
+            var upTree = forest[k, j];
+            
+            currentTree.UpScore += 1;
+
+            if (currentTree.Height <= upTree.Height)
+                break;
+        }
+
+        for (int k = i - 1; k >= 0; k--)
+        {
+            var bottomTree = forest[k, j];
+            
+            currentTree.BottomScore += 1;
+
+            if (currentTree.Height <= bottomTree.Height)
+                break;
         }
     }
 }
 
-for (int column = 0; column < forest.GetLength(0); column++)
+var maxScore = 0;
+foreach (var tree in forest)
 {
-    var minHeight = int.MinValue;
-    for (int line = 0; line < forest.GetLength(0); line++)
-    {
-        var currentTreeHeight = forest[line, column];
+    var currentScore = tree.LeftScore * tree.RightScore * tree.UpScore * tree.BottomScore;
 
-        if (currentTreeHeight > minHeight)
-        {
-            minHeight = currentTreeHeight;
-            visibleTrees.Add(new TreePosition(line, column));
-        }
-    }
-
-    minHeight = int.MinValue;
-    for (int line = forest.GetLength(0) - 1; line >= 0; line--)
-    {
-        var currentTreeHeight = forest[line, column];
-
-        if (currentTreeHeight > minHeight)
-        {
-            minHeight = currentTreeHeight;
-            visibleTrees.Add(new TreePosition(line, column));
-        }
-    }
+    if (currentScore > maxScore)
+        maxScore = currentScore;
 }
 
-Console.WriteLine(visibleTrees.Count);
+Console.WriteLine(maxScore);
 
-public record TreePosition(int X, int Y);
+internal sealed class Tree
+{
+    public int Height { get; set; }
+    public int RightScore { get; set; }
+    public int LeftScore { get; set; }
+    public int UpScore { get; set; }
+    public int BottomScore { get; set; }
+}
